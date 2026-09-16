@@ -1,15 +1,14 @@
-group = "app.template"
+group = "app.agentkosticka"
 
 patches {
-    // TODO: Update this section with your project details.
     about {
-        name = "UserXYZ Patches"
-        description = "Patches for apps I like"
-        source = "git@github.com:UserXYZ/morphe-patches.git"
-        author = "Awesome dev"
-        contact = "na"
-        website = "na"
-        license = "GPLv3"
+        name = "AgentKosticka Jam Patch Source"
+        description = "Morphe patch catalog with optional Jam queue sharing for YouTube Music"
+        source = "https://github.com/AgentKosticka/Jam-Patches"
+        author = "AgentKosticka"
+        contact = "https://github.com/AgentKosticka"
+        website = "https://github.com/AgentKosticka/Jam-Layer"
+        license = "GNU General Public License v3.0, with additional GPL section 7 requirements"
     }
 }
 
@@ -19,19 +18,35 @@ val patchListGeneratorClasspath = configurations.create("patchListGeneratorClass
 
 dependencies {
     compileOnly(libs.gson)
+    // Required due to smali, or build fails. Can be removed once smali is bumped.
+    implementation(libs.guava)
+
+    implementation(libs.morphe.patches.library)
+
     patchListGeneratorClasspath(libs.gson)
+
+    // Android API stubs defined here.
+    compileOnly(project(":patches:stub"))
 }
 
 tasks {
+    register<JavaExec>("checkStringResources") {
+        description = "Checks resource strings for invalid formatting"
+
+        dependsOn(build)
+
+        classpath = sourceSets["main"].runtimeClasspath
+        mainClass.set("app.morphe.patches.util.resource.CheckStringResourcesKt")
+    }
+
     register<JavaExec>("generatePatchesList") {
         description = "Build patch with patch list"
 
         dependsOn(build)
 
         classpath = sourceSets["main"].runtimeClasspath + patchListGeneratorClasspath
-        mainClass.set("util.PatchListGeneratorKt")
+        mainClass.set("app.morphe.util.PatchListGeneratorKt")
     }
-
     // Used by gradle-semantic-release-plugin.
     publish {
         dependsOn("generatePatchesList")
