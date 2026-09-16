@@ -8,6 +8,12 @@ Add this GitHub source in Morphe Manager and enable prereleases. Select **Jam qu
 
 Development changes land on `dev`; semantic release publishes prerelease `.mpp` bundles for Morphe Manager. The bundle includes all Morphe patches as required by Jam's upstream patch dependencies.
 
+## Patch catalog
+
+<!-- PATCHES_START -->
+The patch catalog will be generated on the first release.
+<!-- PATCHES_END -->
+
 This project is licensed under the [GNU General Public License v3.0](LICENSE). See [NOTICE](NOTICE) for required attribution and naming terms.
 This source bundle embeds public Morphe source projects for reproducible builds:
 
