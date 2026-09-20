@@ -1,3 +1,9 @@
+## [1.0.0-dev.4](https://github.com/AgentKosticka/Jam-Patches/compare/v1.0.0-dev.3...v1.0.0-dev.4) (2026-09-20)
+
+### 🐛 Bug Fixes
+
+* sync final Jam protobuf bridge revision ([50b0144](https://github.com/AgentKosticka/Jam-Patches/commit/50b0144c092ab4e64ad194cc2c99f82ab60882e8))
+
 ## [1.0.0-dev.3](https://github.com/AgentKosticka/Jam-Patches/compare/v1.0.0-dev.2...v1.0.0-dev.3) (2026-09-20)
 
 ### 🐛 Bug Fixes
