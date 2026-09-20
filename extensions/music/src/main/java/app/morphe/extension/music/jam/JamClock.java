@@ -12,7 +12,17 @@ import app.morphe.extension.music.shared.VideoInformation;
 
 /** Host clock samples are separate from queue revisions and use local monotonic time. */
 public final class JamClock {
-    public interface Bar { Object patch_jamModel(long position,long duration);void patch_jamClock(long position,long duration); void patch_jamRestore(Object model); }
+    public interface Bar {
+        Object patch_jamCreateModel(long position, long duration, int color, boolean labelEnabled);
+        default Object patch_jamModel(long position, long duration) {
+            return patch_jamCreateModel(position, duration, 0xffffffff, true);
+        }
+        boolean patch_jamDragging();
+        void patch_jamRestore(Object model);
+        default void patch_jamClock(long position, long duration) {
+            if (!patch_jamDragging()) patch_jamRestore(patch_jamModel(position, duration));
+        }
+    }
     private static volatile MediaController controller;
     private static final Map<Bar,Object> bars=new WeakHashMap<>();
     private static JSONObject sample;
@@ -22,6 +32,54 @@ public final class JamClock {
     private static final String generation=UUID.randomUUID().toString();
     private static long serial;
     public static void capture(MediaSession session){controller=session.getController();}
+    /** YTM's MediaSession resolves this persistent ID in both native queue lanes. */
+    static void playHost(long itemId) throws Exception {
+        MediaController current = controller;
+        if (current == null) throw new IllegalStateException("Open the host player first");
+        PlaybackState state = current.getPlaybackState();
+        if (state == null) throw new IllegalStateException("Host player is not ready");
+        MediaController.TransportControls controls = current.getTransportControls();
+        CompletableFuture<Void> playing = new CompletableFuture<>();
+        Runnable confirm = new Runnable() {
+            private boolean resumed;
+
+            @Override public void run() {
+                if (playing.isDone()) return;
+                if (controller != current) {
+                    playing.completeExceptionally(new IllegalStateException("Host player changed; retry"));
+                    return;
+                }
+                try {
+                    PlaybackState next = current.getPlaybackState();
+                    if (next != null && next.getActiveQueueItemId() == itemId) {
+                        if (next.getState() == PlaybackState.STATE_PLAYING) {
+                            playing.complete(null);
+                            return;
+                        }
+                        if (!resumed && next.getState() == PlaybackState.STATE_PAUSED) {
+                            resumed = true;
+                            controls.play();
+                        }
+                    }
+                    JamUi.main.postDelayed(this, 100);
+                } catch (Exception error) {
+                    playing.completeExceptionally(error);
+                }
+            }
+        };
+        // Never fall back to an enqueue endpoint. Wait off the native queue
+        // executor so selection and MediaSession publication can finish.
+        if (state.getActiveQueueItemId() != itemId) controls.skipToQueueItem(itemId);
+        JamUi.main.post(confirm);
+        try {
+            playing.get(8, TimeUnit.SECONDS);
+        } catch (TimeoutException error) {
+            throw new IllegalStateException("Host did not confirm playback; check the host player");
+        } finally {
+            playing.cancel(false);
+            JamUi.main.removeCallbacks(confirm);
+        }
+    }
     static JSONObject snapshot()throws Exception{
         MediaController c=controller;JSONObject out=new JSONObject().put("generation",generation).put("sequence",++serial).put("sampledAt",SystemClock.elapsedRealtime()).put("videoId",VideoInformation.getVideoId());
         if(c==null)return out;
@@ -45,7 +103,15 @@ public final class JamClock {
     static long position(){return sample==null?0:JamTime.position(sample.optLong("position"),sample.optLong("duration"),sample.optDouble("speed",1),sample.optBoolean("playing"),SystemClock.elapsedRealtime()-received);}
     public static Object model(Object view,Object local){if(!(view instanceof Bar))return local;Bar bar=(Bar)view;bars.put(bar,local);return sample==null?local:bar.patch_jamModel(position(),sample.optLong("duration"));}
     private static final Runnable tick=new Runnable(){public void run(){if(sample==null){ticking=false;return;}for(Bar bar:new ArrayList<>(bars.keySet()))try{bar.patch_jamClock(position(),sample.optLong("duration"));}catch(Exception ignored){}JamUi.main.postDelayed(this,200);}};
-    static void clear(){sample=null;stream="";sequence=-1;for(Map.Entry<Bar,Object> e:new ArrayList<>(bars.entrySet()))try{e.getKey().patch_jamRestore(e.getValue());}catch(Exception ignored){}bars.clear();}
+    static void clear(){
+        boolean wasMirroring=sample!=null;
+        sample=null;stream="";sequence=-1;
+        if(wasMirroring)for(Map.Entry<Bar,Object> e:new ArrayList<>(bars.entrySet()))
+            try{e.getKey().patch_jamRestore(e.getValue());}catch(Exception ignored){}
+        // Idle polls must not forget existing time bars. A paused guest can join
+        // without another native model callback; the host clock still needs to
+        // update that bar. Weak keys release detached views without a session reset.
+    }
     public static boolean offerSeek(long target){
         if(!JamMirror.active())return false;if(sample==null)return true;
         long duration=sample.optLong("duration");if(duration<=0)return true;long at=Math.max(0,Math.min(duration-1,target));String video=sample.optString("videoId");

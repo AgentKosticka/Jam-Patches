@@ -1,12 +1,20 @@
 # Jam Patch Source
 
-Optional prerelease patch source for [Jam Layer](https://github.com/AgentKosticka/Jam-Layer), providing Jam queue sharing for YouTube Music 9.15.51.
+Optional prerelease patch source for [Jam Layer](https://github.com/AgentKosticka/Jam-Layer), providing Jam queue sharing for YouTube Music **9.15.51 ARM64 only**.
 
 This bundle includes the Morphe patch catalog plus the opt-in **Jam queue sharing** patch. Since it includes the upstream catalog, remove the standard Morphe patch source in Morphe Manager before adding this source, to avoid duplicate patches.
 
-Add this GitHub source in Morphe Manager and enable prereleases. Select **Jam queue sharing** while patching YouTube Music 9.15.51. Install [Jam Layer](https://github.com/AgentKosticka/Jam-Layer/releases) on the devices you want to pair.
+Add the GitHub source `AgentKosticka/Jam-Patches` in Morphe Manager and enable prereleases. Select **Jam queue sharing** while patching a clean YouTube Music 9.15.51 ARM64 APK. Install the signed `app-release.apk` from [Jam Layer v1.0.1](https://github.com/AgentKosticka/Jam-Layer/releases/tag/v1.0.1) on the devices you want to pair.
 
 Development changes land on `dev`; semantic release publishes prerelease `.mpp` bundles for Morphe Manager. The bundle includes all Morphe patches as required by Jam's upstream patch dependencies.
+
+## Source and validation
+
+The implementation is synchronized from fork commit [`2a9a9104d9361290261bdacffa9c0aed507438a8`](https://github.com/AgentKosticka/morphe-patches/commit/2a9a9104d9361290261bdacffa9c0aed507438a8). The matching Companion commit is [`c9a389e19c3ff7b41bd4abe035dfe24673c88f0a`](https://github.com/AgentKosticka/Jam-Layer/commit/c9a389e19c3ff7b41bd4abe035dfe24673c88f0a).
+
+Reproduce the source sync with `python .github/scripts/sync_fork.py ../morphe-patches 2a9a9104d9361290261bdacffa9c0aed507438a8`. `source-revision.json` records the exact upstream files, hashes, dependency revisions, and build metadata overlay. Source identity and release metadata remain specific to this repository.
+
+The fork passed Jam regression tests, 9.15.51 patch/build and DEX hierarchy verification, and manual device checks including autoplay, clock updates and LAN discovery. The new published bundle still requires the clean Morphe Manager source and two-device manual acceptance test. Versions 9.34.52, 9.35.54 and 9.36.50 failed required semantic capability resolution and are not supported.
 
 ## Patch catalog
 
@@ -233,6 +241,7 @@ This source bundle embeds public Morphe source projects for reproducible builds:
 
 - `morphe-patcher` at `5eacde46237f2fe657eb9bfbe90d2528d248a336`
 - `morphe-patches-library` at `e930e2eea34437fbdc4836a4daa8213f0ca8abcf`
+- `morphe-patches-gradle-plugin` at `9e6220d8ac3c0092c233af4e216f3bab6bb22e0d`, with the existing `SettingsPlugin.kt` overlay defaulting absent GitHub credentials to empty strings for public composite builds
 
 The projects are distributed under their included licenses. Submodules are flattened so CI does not depend on access to private package registries.
 

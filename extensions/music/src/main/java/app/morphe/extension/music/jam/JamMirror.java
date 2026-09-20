@@ -6,6 +6,19 @@ import java.util.*;
 
 /** Native adapters display authoritative state plus unacknowledged local gestures. */
 public final class JamMirror {
+    public interface AutoplayUi {
+        void patch_jamAutoplayLimit(int count);
+        void patch_jamRefreshAutoplayUi();
+    }
+    private static final Set<AutoplayUi> autoplayViews=Collections.newSetFromMap(new WeakHashMap<>());
+    public static void autoplayUi(AutoplayUi view){
+        autoplayViews.add(view);
+        NativeQueueList lane=autoplay;
+        if(mirror!=null&&lane!=null)view.patch_jamAutoplayLimit(lane.size());
+    }
+    private static void refreshAutoplayUi(){
+        for(AutoplayUi view:new ArrayList<>(autoplayViews))view.patch_jamRefreshAutoplayUi();
+    }
     private static volatile NativeQueueList mirror,autoplay;
     private static Object original,originalAutoplay;
     private static YtmBridge.QueueAccess owner;
@@ -24,31 +37,38 @@ public final class JamMirror {
             if(!participant){
                 if(owner==access&&mirror!=null&&access.patch_jamDisplayedList()==mirror)access.patch_jamDisplayedList(original);
                 if(owner==access&&autoplay!=null&&access.patch_jamDisplayedAutoplay()==autoplay)access.patch_jamDisplayedAutoplay(originalAutoplay);
-                boolean wasActive=mirror!=null;mirror=null;autoplay=null;original=null;originalAutoplay=null;owner=null;snapshot=null;rendered="";current=-1;edits.clear();sending=false;epoch++;if(wasActive){JamArtwork.clear();JamPlayback.refresh();}return;
+                boolean wasActive=mirror!=null;mirror=null;autoplay=null;original=null;originalAutoplay=null;owner=null;snapshot=null;rendered="";current=-1;edits.clear();sending=false;epoch++;if(wasActive){refreshAutoplayUi();JamArtwork.clear();JamPlayback.refresh();}return;
             }
             if(!view.has("items"))return;
             if(owner!=access){mirror=null;autoplay=null;rendered="";owner=access;original=access.patch_jamDisplayedList();originalAutoplay=access.patch_jamDisplayedAutoplay();edits.clear();sending=false;epoch++;}
-            if(original==null||originalAutoplay==null){original=access.patch_jamDisplayedList();originalAutoplay=access.patch_jamDisplayedAutoplay();if(original==null||originalAutoplay==null)return;}
-            if(mirror==null){mirror=new NativeQueueList();autoplay=new NativeQueueList();}
+            if(original==null){original=access.patch_jamDisplayedList();if(original==null)return;}
+            if(mirror==null){originalAutoplay=access.patch_jamDisplayedAutoplay();mirror=new NativeQueueList();autoplay=new NativeQueueList();}
             edits.accept(view);render();
         }catch(Exception e){android.util.Log.e("MorpheJam","Native mirror failed",e);}});
     }
     private static void render()throws Exception{
         JSONObject view=edits.view();if(view==null||owner==null)return;
         JSONArray rows=view.getJSONArray("items"),suggested=view.optJSONArray("autoplay");
-        String signature=rows.toString()+String.valueOf(suggested);
-        if(signature.equals(rendered))return;
-        List<Object> next=new ArrayList<>(),future=new ArrayList<>();int playing=-1;
-        for(int i=0;i<rows.length();i++){JSONObject row=rows.getJSONObject(i);next.add(item(row));if(row.optBoolean("current"))playing=i;}
-        if(suggested!=null)for(int i=0;i<suggested.length();i++)future.add(item(suggested.getJSONObject(i)));
-        mirror.replace(next);autoplay.replace(future);snapshot=view;current=playing;rendered=signature;
-        if(owner.patch_jamDisplayedList()!=mirror)owner.patch_jamDisplayedList(mirror);else owner.patch_jamRefreshDisplay();
-        if(owner.patch_jamDisplayedAutoplay()!=autoplay)owner.patch_jamDisplayedAutoplay(autoplay);else owner.patch_jamRefreshAutoplay();
-        if(playing>=0){JSONObject row=rows.getJSONObject(playing);JamArtwork.update(QueueModel.thumbnail(row.optString("thumbnail"),row.getString("videoId")));}
-        JamPlayback.refresh();
+        String signature=rows.toString()+String.valueOf(suggested);int playing=-1;
+        for(int i=0;i<rows.length();i++)if(rows.getJSONObject(i).optBoolean("current")){playing=i;break;}
+        boolean changed=!signature.equals(rendered),currentChanged=current!=playing;snapshot=view;current=playing;
+        if(changed){
+            List<Object> next=new ArrayList<>(),future=new ArrayList<>();
+            for(int i=0;i<rows.length();i++)next.add(item(rows.getJSONObject(i)));
+            if(suggested!=null)for(int i=0;i<suggested.length();i++)future.add(item(suggested.getJSONObject(i)));
+            mirror.replace(next);autoplay.replace(future);rendered=signature;
+        }
+        boolean refreshed=changed;
+        if(owner.patch_jamDisplayedList()!=mirror){owner.patch_jamDisplayedList(mirror);refreshed=true;}else if(changed)owner.patch_jamRefreshDisplay();
+        if(owner.patch_jamDisplayedAutoplay()!=autoplay){owner.patch_jamDisplayedAutoplay(autoplay);refreshed=true;}else if(changed)owner.patch_jamRefreshAutoplay();
+        if(playing>=0){JSONObject row=rows.getJSONObject(playing);JamArtwork.update(QueueModel.thumbnail(row.optString("thumbnail"),row.getString("videoId")));}else JamArtwork.clear();
+        if(refreshed||currentChanged){refreshAutoplayUi();JamPlayback.refresh();}
     }
     private static Object item(JSONObject row)throws Exception{return owner.patch_jamCreateItem(QueueModel.encode(row.getString("videoId"),row.optString("title"),row.optString("artist"),row.optString("thumbnail")),Long.parseLong(row.getString("id")));}
     public static Object now(){NativeQueueList list=mirror;int index=current;return list!=null&&index>=0&&index<list.size()?list.get(index):null;}
+    static String title(){return nowText("title");}
+    static String artist(){return nowText("artist");}
+    private static String nowText(String key){JSONObject view=snapshot;int index=current;try{JSONArray rows=view==null?null:view.optJSONArray("items");return rows==null||index<0||index>=rows.length()?null:rows.getJSONObject(index).optString(key,"");}catch(Exception ignored){return null;}}
     public static int current(Object list){return list==mirror?current:list==autoplay?-1:-2;}
     public static int selection(Object item){NativeQueueList main=mirror,future=autoplay;if(main==null)return -1;int index=main.indexOf(item);return index>=0?(index==current?1:0):future!=null&&future.contains(item)?0:-1;}
     public static boolean active(){return mirror!=null;}
