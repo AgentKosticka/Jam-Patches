@@ -50,6 +50,22 @@ jobs:
           subject-name: 'AgentKosticka Jam Patch Source ${{ steps.release.outputs.new_release_git_tag }}'
           subject-path: patches/build/libs/patches-*.mpp
 
+      # Manager resolves bare repository URLs via main and compares main/dev
+      # versions even for prerelease users. Never retain inherited upstream metadata.
+      - name: Sync custom source entry point
+        if: steps.release.outputs.new_release_published == 'true'
+        run: |
+          git fetch origin main
+          git worktree add "$RUNNER_TEMP/jam-source-main" origin/main
+          cp patches-bundle.json patches-list.json "$RUNNER_TEMP/jam-source-main/"
+          git -C "$RUNNER_TEMP/jam-source-main" config user.name "github-actions[bot]"
+          git -C "$RUNNER_TEMP/jam-source-main" config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C "$RUNNER_TEMP/jam-source-main" add patches-bundle.json patches-list.json
+          if ! git -C "$RUNNER_TEMP/jam-source-main" diff --cached --quiet; then
+            git -C "$RUNNER_TEMP/jam-source-main" commit -m "chore: sync Jam source entry point [skip ci]"
+            git -C "$RUNNER_TEMP/jam-source-main" push origin HEAD:main
+          fi
+
       # Always verify compilation when semantic-release did not publish a release.
       # This covers non-main/dev branches, chore commits, docs commits, etc.
       - name: Verify project compiles

@@ -8,6 +8,8 @@ Add the GitHub source `AgentKosticka/Jam-Patches` in Morphe Manager and enable p
 
 Development changes land on `dev`; semantic release publishes prerelease `.mpp` bundles for Morphe Manager. The bundle includes all Morphe patches as required by Jam's upstream patch dependencies.
 
+This is a prerelease-only source. Both `main` and `dev` source metadata point to the current Jam prerelease because Manager resolves repository URLs through `main` and compares both channels. Neither entry point should refer to the standard upstream Morphe bundle. In Expert mode, explicitly select the opt-in **Jam queue sharing** patch; it is not enabled by the default patch selection.
+
 ## Source and validation
 
 The implementation is synchronized from fork commit [`2a9a9104d9361290261bdacffa9c0aed507438a8`](https://github.com/AgentKosticka/morphe-patches/commit/2a9a9104d9361290261bdacffa9c0aed507438a8). The matching Companion commit is [`c9a389e19c3ff7b41bd4abe035dfe24673c88f0a`](https://github.com/AgentKosticka/Jam-Layer/commit/c9a389e19c3ff7b41bd4abe035dfe24673c88f0a).
