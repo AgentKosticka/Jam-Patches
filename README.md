@@ -21,7 +21,7 @@ The fork passed Jam regression tests, 9.15.51 patch/build and DEX hierarchy veri
 ## Patch catalog
 
 <!-- PATCHES_START -->
-> **[v1.0.0-dev.2](https://github.com/AgentKosticka/Jam-Patches/releases/tag/v1.0.0-dev.2)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;148 patches total
+> **[v1.0.0-dev.3](https://github.com/AgentKosticka/Jam-Patches/releases/tag/v1.0.0-dev.3)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;148 patches total
 <details>
 <summary>📦 YouTube&nbsp;&nbsp;•&nbsp;&nbsp;82 patches</summary>
 <br>

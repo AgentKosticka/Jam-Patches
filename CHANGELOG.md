@@ -1,3 +1,9 @@
+## [1.0.0-dev.3](https://github.com/AgentKosticka/Jam-Patches/compare/v1.0.0-dev.2...v1.0.0-dev.3) (2026-09-20)
+
+### 🐛 Bug Fixes
+
+* forward participant skip controls to host ([5fa3808](https://github.com/AgentKosticka/Jam-Patches/commit/5fa3808f958c4b31c4203dd3cc5b83228792ed3a))
+
 ## [1.0.0-dev.2](https://github.com/AgentKosticka/Jam-Patches/compare/v1.0.0-dev.1...v1.0.0-dev.2) (2026-09-20)
 
 ### 🐛 Bug Fixes
