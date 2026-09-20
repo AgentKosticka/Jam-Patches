@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/AgentKosticka/morphe-patches",
-  "commit": "2a9a9104d9361290261bdacffa9c0aed507438a8",
+  "commit": "39725551705b98f3d4bbf91ba83e10783f17305a",
   "paths": [
     "extensions",
     "patches/src",
@@ -15,8 +15,8 @@
     "extensions/music/src/main/AndroidManifest.xml": "18af6467c51220070c6b2515b61393e507d67e1cb1a4368a1c758b7a3270f848",
     "extensions/music/src/main/java/app/morphe/extension/music/jam/JamArtwork.java": "17ef74835f74708f307a68dac98b5820dfc301f4bb6612505a5db4d929c5be3b",
     "extensions/music/src/main/java/app/morphe/extension/music/jam/JamBar.java": "0f5c0b1cb14f971c8ca5a31ed5219b1c15eb161588c03613f5464616d6faa140",
-    "extensions/music/src/main/java/app/morphe/extension/music/jam/JamBridgeService.java": "b2eb0e93ba4af5727214bde4af51dc0815a2a90bf182dd64c598c38f7a8492de",
-    "extensions/music/src/main/java/app/morphe/extension/music/jam/JamClock.java": "3c3c0e3ef5cbbe1e9ab4fd40371b1fe0e5c4b35a27a0ebeaa18eaae047c165f7",
+    "extensions/music/src/main/java/app/morphe/extension/music/jam/JamBridgeService.java": "008be6dafe6e328b6a98dc630ce91fbde93fde0461fa15b8899f3a83ac0de943",
+    "extensions/music/src/main/java/app/morphe/extension/music/jam/JamClock.java": "722b48db1084a331c0c03ec5c5821d37b61caa1d9fbe02e59f418e6a3af44de1",
     "extensions/music/src/main/java/app/morphe/extension/music/jam/JamCompanionPackagePreference.java": "fc72d39c7e7a88c25fa25d1f1aadf863c5f0537f2357409b95c0b2e6a628a057",
     "extensions/music/src/main/java/app/morphe/extension/music/jam/JamCompletion.java": "946ac527417ac4cbf3eda0a28b85d26544a91c73382a322c8a4dcbc6ed9503f4",
     "extensions/music/src/main/java/app/morphe/extension/music/jam/JamMenu.java": "3e172fa28155906d30eab96de7cbe045ef0efb13181b7e6722c341f688a02449",
@@ -24,7 +24,7 @@
     "extensions/music/src/main/java/app/morphe/extension/music/jam/JamMirror.java": "40a2babd9904e7e64569c1b528f773902555a1db9b13345871f89bccfe757452",
     "extensions/music/src/main/java/app/morphe/extension/music/jam/JamPalette.java": "f628c0824d9cdda383b7a2febcc2c1a256edc853acf0cea6266e8bd9057f0797",
     "extensions/music/src/main/java/app/morphe/extension/music/jam/JamPanel.java": "6ebe67828b97542bf27da7fc665b936c1e7676ff0af9b6344a5abf6e485a4ed9",
-    "extensions/music/src/main/java/app/morphe/extension/music/jam/JamPlayback.java": "919477826fbb434a006af4c3015541c3c21f02215cf8a081f6bc31f32a5b945d",
+    "extensions/music/src/main/java/app/morphe/extension/music/jam/JamPlayback.java": "2214ff7620e896c9de826aa4c0d7f1be969359ed28cbfde8907b747ad8795603",
     "extensions/music/src/main/java/app/morphe/extension/music/jam/JamProbePreference.java": "55d7b283e98e1254854e51049b4a0fd504f5c7177e9c4b9fbbd9a585fe12ca66",
     "extensions/music/src/main/java/app/morphe/extension/music/jam/JamTime.java": "a68dc0f073ba735bf608af08466de74dec3140b2e20cdd4709896f4abc58d1e3",
     "extensions/music/src/main/java/app/morphe/extension/music/jam/JamUi.java": "2e52887d70d9f6273427c4afc2bc855c0c82275c777aab9532bd129dd6812450",

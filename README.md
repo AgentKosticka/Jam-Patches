@@ -4,7 +4,7 @@ Optional prerelease patch source for [Jam Layer](https://github.com/AgentKostick
 
 This bundle includes the Morphe patch catalog plus the opt-in **Jam queue sharing** patch. Since it includes the upstream catalog, remove the standard Morphe patch source in Morphe Manager before adding this source, to avoid duplicate patches.
 
-Add the GitHub source `AgentKosticka/Jam-Patches` in Morphe Manager and enable prereleases. Select **Jam queue sharing** while patching a clean YouTube Music 9.15.51 ARM64 APK. Install the signed `app-release.apk` from [Jam Layer v1.0.1](https://github.com/AgentKosticka/Jam-Layer/releases/tag/v1.0.1) on the devices you want to pair.
+Add the GitHub source `AgentKosticka/Jam-Patches` in Morphe Manager and enable prereleases. Select **Jam queue sharing** while patching a clean YouTube Music 9.15.51 ARM64 APK. Install the signed `app-release.apk` from [Jam Layer v1.0.2](https://github.com/AgentKosticka/Jam-Layer/releases/tag/v1.0.2) on the devices you want to pair.
 
 Development changes land on `dev`; semantic release publishes prerelease `.mpp` bundles for Morphe Manager. The bundle includes all Morphe patches as required by Jam's upstream patch dependencies.
 
@@ -12,11 +12,11 @@ This is a prerelease-only source. Both `main` and `dev` source metadata point to
 
 ## Source and validation
 
-The implementation is synchronized from fork commit [`2a9a9104d9361290261bdacffa9c0aed507438a8`](https://github.com/AgentKosticka/morphe-patches/commit/2a9a9104d9361290261bdacffa9c0aed507438a8). The matching Companion commit is [`c9a389e19c3ff7b41bd4abe035dfe24673c88f0a`](https://github.com/AgentKosticka/Jam-Layer/commit/c9a389e19c3ff7b41bd4abe035dfe24673c88f0a).
+The implementation is synchronized from fork commit [`39725551705b98f3d4bbf91ba83e10783f17305a`](https://github.com/AgentKosticka/morphe-patches/commit/39725551705b98f3d4bbf91ba83e10783f17305a). The matching Companion commit is [`e2c9e0f0299be84e4d1e95d9dbf5fc7a2a2aed1f`](https://github.com/AgentKosticka/Jam-Layer/commit/e2c9e0f0299be84e4d1e95d9dbf5fc7a2a2aed1f).
 
-Reproduce the source sync with `python .github/scripts/sync_fork.py ../morphe-patches 2a9a9104d9361290261bdacffa9c0aed507438a8`. `source-revision.json` records the exact upstream files, hashes, dependency revisions, and build metadata overlay. Source identity and release metadata remain specific to this repository.
+Reproduce the source sync with `python .github/scripts/sync_fork.py ../morphe-patches 39725551705b98f3d4bbf91ba83e10783f17305a`. `source-revision.json` records the exact upstream files, hashes, dependency revisions, and build metadata overlay. Source identity and release metadata remain specific to this repository.
 
-The fork passed Jam regression tests, 9.15.51 patch/build and DEX hierarchy verification, and manual device checks including autoplay, clock updates and LAN discovery. The new published bundle still requires the clean Morphe Manager source and two-device manual acceptance test. Versions 9.34.52, 9.35.54 and 9.36.50 failed required semantic capability resolution and are not supported.
+The fork passed Jam regression tests, 9.15.51 patch/build and DEX hierarchy verification, and manual device checks including autoplay, clock updates and LAN discovery. Participant next/previous controls now forward to the host through the authenticated Jam command path and consume the local player click. The new published bundle still requires the clean Morphe Manager source and two-device manual acceptance test. Versions 9.34.52, 9.35.54 and 9.36.50 failed required semantic capability resolution and are not supported.
 
 ## Patch catalog
 
