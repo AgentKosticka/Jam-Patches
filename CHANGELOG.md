@@ -1,3 +1,9 @@
+## [1.0.0-dev.2](https://github.com/AgentKosticka/Jam-Patches/compare/v1.0.0-dev.1...v1.0.0-dev.2) (2026-09-20)
+
+### 🐛 Bug Fixes
+
+* sync validated semantic Jam bridge and runtime fixes ([f292617](https://github.com/AgentKosticka/Jam-Patches/commit/f29261756c101a05e680c275d569a3bfb79f2407))
+
 ## 1.0.0-dev.1 (2026-09-16)
 
 ### 🐛 Bug Fixes

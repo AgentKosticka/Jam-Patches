@@ -19,7 +19,7 @@ The fork passed Jam regression tests, 9.15.51 patch/build and DEX hierarchy veri
 ## Patch catalog
 
 <!-- PATCHES_START -->
-> **[v1.0.0-dev.1](https://github.com/AgentKosticka/Jam-Patches/releases/tag/v1.0.0-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;149 patches total
+> **[v1.0.0-dev.2](https://github.com/AgentKosticka/Jam-Patches/releases/tag/v1.0.0-dev.2)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;148 patches total
 <details>
 <summary>📦 YouTube&nbsp;&nbsp;•&nbsp;&nbsp;82 patches</summary>
 <br>
@@ -184,7 +184,7 @@ The fork passed Jam regression tests, 9.15.51 patch/build and DEX hierarchy veri
 | [Hide flyout menu components](#hide-flyout-menu-components) | Adds options to hide individual items from the player and queue flyout menus. |  |
 | [Hide layout components](#hide-layout-components) | Adds options to hide general layout components. |  |
 | [Hide music action buttons](#hide-music-action-buttons) | Adds options to hide action buttons under the player. |  |
-| [Jam queue sharing](#jam-queue-sharing) | Adds a native Jam queue panel and authenticated bridge to the Jam compatibility layer. Experimental, YTM 9.15.51 only. |  |
+| [Jam queue sharing](#jam-queue-sharing) | Adds a native Jam queue panel and authenticated bridge. Experimental; validated on YTM 9.15.51. |  |
 | [Miniplayer previous and next buttons](#miniplayer-previous-and-next-buttons) | Adds options to show previous and next track buttons in the miniplayer. |  |
 | [Navigation bar](#navigation-bar) | Adds options to hide navigation bar, labels and buttons. |  |
 | [Network proxy](#network-proxy) | Adds settings to route supported network requests through an HTTP or HTTPS proxy. Including this patch may cause connectivity problems on certain devices |  |
@@ -203,21 +203,6 @@ The fork passed Jam regression tests, 9.15.51 patch/build and DEX hierarchy veri
 | [Spoof video streams](#spoof-video-streams) | Adds options to spoof the client video streams to fix playback. |  |
 | [Theme](#theme) | Adds options for theming, and settings to change the app foreground and background colors. | • Dark theme color |
 | [Third-party lyrics](#third-party-lyrics) | Adds an option to show synced lyrics from LRCLIB or KuGou in the lyrics panel. |  |
-
-</details>
-
-<details>
-<summary>📦 XYZ app&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
-<br>
-
-**🎯 Supported versions:**
-
-| 2.0.0 | 1.0.2 |
-| :---: | :---: |
-
-| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
-|----------|----------------|-----------|
-| [Example Patch](#example-patch) | Example patch to start with. |  |
 
 </details>
 
