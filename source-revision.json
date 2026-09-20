@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/AgentKosticka/morphe-patches",
-  "commit": "39725551705b98f3d4bbf91ba83e10783f17305a",
+  "commit": "f4d284afbe95f98528dce4ab867c6059ef8acfd0",
   "paths": [
     "extensions",
     "patches/src",
@@ -29,8 +29,8 @@
     "extensions/music/src/main/java/app/morphe/extension/music/jam/JamTime.java": "a68dc0f073ba735bf608af08466de74dec3140b2e20cdd4709896f4abc58d1e3",
     "extensions/music/src/main/java/app/morphe/extension/music/jam/JamUi.java": "2e52887d70d9f6273427c4afc2bc855c0c82275c777aab9532bd129dd6812450",
     "extensions/music/src/main/java/app/morphe/extension/music/jam/NativeQueueList.java": "f5a19bd63b33fc3eb1e043215fd1e30e6e7b2d5e03700dde43a5bf261bba133f",
-    "extensions/music/src/main/java/app/morphe/extension/music/jam/QueueCommand.java": "cf96a9013ed97e2717ad0c0dc17da8f8fea9e4527d72de4f6687aae48454f8be",
-    "extensions/music/src/main/java/app/morphe/extension/music/jam/QueueModel.java": "d6c7942c75833dceb19bb1c29fc1fab83f3ee35ff6fd1f0b015765d1a8c65b5c",
+    "extensions/music/src/main/java/app/morphe/extension/music/jam/QueueCommand.java": "76a41074dcc59347059acd4c40c2175b50409434d782df3e92329d3d62a30523",
+    "extensions/music/src/main/java/app/morphe/extension/music/jam/QueueModel.java": "a81032d2be4524c2a2c0b6fcb0385a18862169437371c9c6a87c57b0016e7efd",
     "extensions/music/src/main/java/app/morphe/extension/music/jam/YtmBridge.java": "83b801249ce0a24376722c48874c5cc116896be45f937f7d6828b4436ea517ef",
     "extensions/music/src/main/java/app/morphe/extension/music/patches/ChangeHeaderPatch.java": "44c2894b42b093077c218c979f9bb98a158b90b7932be0f22b08cdc5ab73c54a",
     "extensions/music/src/main/java/app/morphe/extension/music/patches/ChangeMiniplayerColorPatch.java": "df545e617643bf4e57295a799d67c12de91900f1deefdf27a4d43ffb677aa20a",
