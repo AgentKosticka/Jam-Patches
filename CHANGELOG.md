@@ -1,3 +1,9 @@
+## [1.0.0-dev.7](https://github.com/AgentKosticka/Jam-Patches/compare/v1.0.0-dev.6...v1.0.0-dev.7) (2026-09-21)
+
+### 🐛 Bug Fixes
+
+* allow independently signed Jam Layer forks ([1d0b382](https://github.com/AgentKosticka/Jam-Patches/commit/1d0b382f708af22a792a6a1e1aabfcf20018758e))
+
 ## [1.0.0-dev.6](https://github.com/AgentKosticka/Jam-Patches/compare/v1.0.0-dev.5...v1.0.0-dev.6) (2026-09-21)
 
 ### ✨ New Features
