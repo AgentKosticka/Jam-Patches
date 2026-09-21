@@ -1,3 +1,9 @@
+## [1.0.0-dev.6](https://github.com/AgentKosticka/Jam-Patches/compare/v1.0.0-dev.5...v1.0.0-dev.6) (2026-09-21)
+
+### ✨ New Features
+
+* make Jam patch opt-out ([17e73db](https://github.com/AgentKosticka/Jam-Patches/commit/17e73db89ccec98c7170fb2ff3bcf15ea53c29c8))
+
 ## [1.0.0-dev.5](https://github.com/AgentKosticka/Jam-Patches/compare/v1.0.0-dev.4...v1.0.0-dev.5) (2026-09-21)
 
 ### 🐛 Bug Fixes
