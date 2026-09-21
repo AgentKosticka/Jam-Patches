@@ -13,7 +13,7 @@ public final class JamBar extends LinearLayout {
     private final ImageView people;
     private final Consumer<JSONObject> observer=this::render;
     public JamBar(Context c,AttributeSet attrs){
-        super(c,attrs);setGravity(Gravity.CENTER_VERTICAL);setPadding(JamUi.dp(c,16),0,JamUi.dp(c,8),0);
+        super(c,attrs);if(!JamUi.enabled()){setVisibility(GONE);title=null;subtitle=null;action=null;progress=null;people=null;return;}setGravity(Gravity.CENTER_VERTICAL);setPadding(JamUi.dp(c,16),0,JamUi.dp(c,8),0);
         FrameLayout icon=new FrameLayout(c);addView(icon,new LayoutParams(JamUi.dp(c,24),JamUi.dp(c,24)));
         people=new ImageView(c);int id=c.getResources().getIdentifier("yt_outline_people_vd_theme_24","drawable",c.getPackageName());if(id!=0)people.setImageResource(id);people.setColorFilter(0xffeeeeee);icon.addView(people,new FrameLayout.LayoutParams(-1,-1));
         progress=new ProgressBar(c);progress.setIndeterminateTintList(android.content.res.ColorStateList.valueOf(0xffeeeeee));icon.addView(progress,new FrameLayout.LayoutParams(-1,-1));
@@ -25,6 +25,6 @@ public final class JamBar extends LinearLayout {
         render(JamUi.latest);
     }
     private void render(JSONObject view){String role=JamPanel.role(view);title.setText(JamPanel.title(view));subtitle.setText(JamPanel.status(view));action.setText("Host".equals(role)?"Manage":"Participant".equals(role)?"Details":"Joining".equals(role)?"Cancel":"Open");boolean busy=JamPanel.waiting(view);progress.setVisibility(busy?VISIBLE:GONE);people.setVisibility(busy?GONE:VISIBLE);setContentDescription(title.getText()+". "+subtitle.getText()+". "+action.getText());}
-    @Override protected void onAttachedToWindow(){super.onAttachedToWindow();JamUi.observe(getContext(),observer);}
-    @Override protected void onDetachedFromWindow(){JamUi.unobserve(observer);super.onDetachedFromWindow();}
+    @Override protected void onAttachedToWindow(){super.onAttachedToWindow();if(JamUi.enabled())JamUi.observe(getContext(),observer);}
+    @Override protected void onDetachedFromWindow(){if(JamUi.enabled())JamUi.unobserve(observer);super.onDetachedFromWindow();}
 }

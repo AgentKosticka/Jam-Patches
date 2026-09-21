@@ -22,7 +22,7 @@ public final class JamBridgeService extends Service {
             synchronized(LOCK){try{return BridgeProtocol.advertise(execute(BridgeProtocol.validate(new JSONObject(request)))).toString();}catch(Exception e){return error(e.getMessage()).toString();}}
         }
     };
-    @Override public IBinder onBind(Intent intent){return binder;}
+    @Override public IBinder onBind(Intent intent){return JamUi.enabled()?binder:null;}
     static JSONObject error(String s){try{return new JSONObject().put("ok",false).put("error",s==null?"Native queue operation failed":s);}catch(Exception e){throw new IllegalStateException(e);}}
     private static <T>T nativeCall(Callable<T> call)throws Exception{
         YtmBridge.QueueAccess access=YtmBridge.access();FutureTask<T> task=new FutureTask<>(()->{if(YtmBridge.access()!=access)throw new IllegalStateException("Player changed");return call.call();});

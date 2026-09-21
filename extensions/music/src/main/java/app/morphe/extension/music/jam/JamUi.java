@@ -4,6 +4,7 @@ import android.content.*;
 import android.graphics.*;
 import android.os.*;
 import android.widget.*;
+import app.morphe.extension.music.settings.Settings;
 import app.morphe.jam.ipc.*;
 import org.json.*;
 import java.lang.ref.WeakReference;
@@ -14,6 +15,7 @@ import java.util.function.Consumer;
 
 /** Player-integrated UI, with one live shared-state feed per YTM process. */
 public final class JamUi {
+    private static final boolean ENABLED=Settings.JAM_ENABLED.get();
     static final Handler main=new Handler(Looper.getMainLooper());
     private static final ExecutorService commands=Executors.newSingleThreadExecutor(),updates=Executors.newSingleThreadExecutor();
     private static final Set<Consumer<JSONObject>> observers=new HashSet<>();
@@ -43,8 +45,9 @@ public final class JamUi {
     }
     private static void resetCompanion(Context c){Context app=c.getApplicationContext();ServiceConnection old=connection;connection=null;companion=null;binding=false;if(old!=null)try{app.unbindService(old);}catch(Exception ignored){}}
     static Activity activity(Context c){while(c instanceof ContextWrapper){if(c instanceof Activity)return (Activity)c;c=((ContextWrapper)c).getBaseContext();}return current.get();}
-    public static void install(Activity a){main.post(()->{current=new WeakReference<>(a);application=a.getApplicationContext();if(!capability(a).isEmpty()){bind(a);ensurePolling();}});}
-    static void observe(Context c,Consumer<JSONObject> observer){observers.add(observer);observer.accept(latest);application=c.getApplicationContext();bind(c);ensurePolling();}
+    public static boolean enabled(){return ENABLED;}
+    public static void install(Activity a){if(!ENABLED)return;main.post(()->{current=new WeakReference<>(a);application=a.getApplicationContext();if(!capability(a).isEmpty()){bind(a);ensurePolling();}});}
+    static void observe(Context c,Consumer<JSONObject> observer){if(!ENABLED)return;observers.add(observer);observer.accept(latest);application=c.getApplicationContext();bind(c);ensurePolling();}
     static void unobserve(Consumer<JSONObject> observer){observers.remove(observer);}
     private static boolean feedEnabled(){return application!=null&&!capability(application).isEmpty();}
     private static boolean sessionActive(){JSONObject session=latest.optJSONObject("session");String role=session==null?"Idle":session.optString("role","Idle");return !"Idle".equals(role);}
@@ -87,7 +90,7 @@ public final class JamUi {
     }
     static void toast(Context c,String message){Toast.makeText(c,message,Toast.LENGTH_LONG).show();}
     private static void startLayer(Context c){c.startForegroundService(new Intent().setComponent(companionComponent(c,COMPANION_SERVICE)).putExtra("cap",capability(c)));}
-    public static void open(Context context){JamPanel.show(context);}
+    public static void open(Context context){if(!ENABLED){toast(context,"Enable Jam queue sharing in settings, then restart YouTube Music");return;}JamPanel.show(context);}
     static void host(Context c){try{startLayer(c);edit(c,command("HOST"));}catch(Exception e){setup(c);}}    static void pair(Context c){
         Activity a=activity(c);if(a==null)return;
         try{if(!Trust.equal(Trust.COMPANION_CERT,Trust.certificate(c,companionPackage(c))))throw new SecurityException("Unrecognized Jam Layer signer");byte[] bytes=new byte[32];new SecureRandom().nextBytes(bytes);StringBuilder token=new StringBuilder();for(byte b:bytes)token.append(String.format(Locale.ROOT,"%02x",b&255));
@@ -128,6 +131,7 @@ public final class JamUi {
         popup.show();styleDialog(popup);
     }
     public static boolean offer(YtmBridge.QueueAccess access,byte[] bytes){
+        if(!ENABLED)return false;
         String[] decoded=QueueCommand.decode(bytes);Activity a=current.get();
         if(decoded==null||a==null||a.isFinishing())return false;
         if(companion==null){if(JamMirror.active()){main.post(()->toast(a,"Jam is reconnecting; try again shortly"));return true;}return false;}

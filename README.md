@@ -2,13 +2,13 @@
 
 Optional prerelease patch source for [Jam Layer](https://github.com/AgentKosticka/Jam-Layer), providing Jam queue sharing for YouTube Music **9.15.51 ARM64 only**.
 
-This bundle includes the Morphe patch catalog plus the opt-in **Jam queue sharing** patch. Since it includes the upstream catalog, remove the standard Morphe patch source in Morphe Manager before adding this source, to avoid duplicate patches.
+This bundle includes the Morphe patch catalog plus the **Jam queue sharing** patch, which is selected by default. Its runtime integration remains disabled until enabled in Player settings and YouTube Music is restarted. Since the bundle includes the upstream catalog, remove the standard Morphe patch source in Morphe Manager before adding this source to avoid duplicate patches.
 
-Add the GitHub source `AgentKosticka/Jam-Patches` in Morphe Manager and enable prereleases. Select **Jam queue sharing** while patching a clean YouTube Music 9.15.51 ARM64 APK. Install the signed `app-release.apk` from [Jam Layer v1.0.2](https://github.com/AgentKosticka/Jam-Layer/releases/tag/v1.0.2) on the devices you want to pair.
+Add the GitHub source `AgentKosticka/Jam-Patches` in Morphe Manager and enable prereleases. Patch a clean YouTube Music 9.15.51 ARM64 APK, then enable Jam queue sharing in Player settings and restart the app. Install the signed `app-release.apk` from the [latest Jam Layer release](https://github.com/AgentKosticka/Jam-Layer/releases/latest) on the devices you want to pair.
 
 Development changes land on `dev`; semantic release publishes prerelease `.mpp` bundles for Morphe Manager. The bundle includes all Morphe patches as required by Jam's upstream patch dependencies.
 
-This is a prerelease-only source. Both `main` and `dev` source metadata point to the current Jam prerelease because Manager resolves repository URLs through `main` and compares both channels. Neither entry point should refer to the standard upstream Morphe bundle. In Expert mode, explicitly select the opt-in **Jam queue sharing** patch; it is not enabled by the default patch selection.
+This is a prerelease-only source. Both `main` and `dev` source metadata point to the current Jam prerelease because Manager resolves repository URLs through `main` and compares both channels. Neither entry point should refer to the standard upstream Morphe bundle. In Expert mode, deselect **Jam queue sharing** if you do not want it included; the feature itself remains disabled by default at runtime.
 
 ## Source and validation
 

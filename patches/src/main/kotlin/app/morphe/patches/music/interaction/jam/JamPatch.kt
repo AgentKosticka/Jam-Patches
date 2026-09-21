@@ -13,6 +13,7 @@ import app.morphe.patches.music.shared.MusicActivityOnCreateFingerprint
 import app.morphe.patches.music.video.information.musicVideoInformationPatch
 import app.morphe.patches.shared.misc.settings.preference.NonInteractivePreference
 import app.morphe.patches.shared.misc.settings.preference.PreferenceScreenPreference
+import app.morphe.patches.shared.misc.settings.preference.SwitchPreference
 
 private val jamResources = resourcePatch {
     execute {
@@ -51,7 +52,7 @@ private val jamResources = resourcePatch {
 val jamQueueProbePatch = bytecodePatch(
     name = "Jam queue sharing",
     description = "Adds a native Jam queue panel and authenticated bridge. Experimental; validated on YTM 9.15.51.",
-    default = false,
+    default = true,
 ) {
     dependsOn(sharedExtensionPatch, settingsPatch, jamResources, musicVideoInformationPatch, resourceMappingPatch)
     compatibleWith(Compatibility(
@@ -81,6 +82,15 @@ val jamQueueProbePatch = bytecodePatch(
                 key = "morphe_music_jam_probe",
                 sorting = PreferenceScreenPreference.Sorting.UNSORTED,
                 preferences = setOf(
+                    SwitchPreference(
+                        key = "morphe_music_jam_enabled",
+                        summary = true,
+                    ),
+                    NonInteractivePreference(
+                        key = "morphe_music_jam_download",
+                        tag = "app.morphe.extension.music.jam.JamDownloadPreference",
+                        selectable = true,
+                    ),
                     NonInteractivePreference(
                         key = "morphe_music_jam_controls",
                         tag = "app.morphe.extension.music.jam.JamProbePreference",
