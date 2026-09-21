@@ -1,3 +1,9 @@
+## [1.0.0-dev.5](https://github.com/AgentKosticka/Jam-Patches/compare/v1.0.0-dev.4...v1.0.0-dev.5) (2026-09-21)
+
+### 🐛 Bug Fixes
+
+* sync Jam source with Morphe v1.44.0 ([ae0b6ca](https://github.com/AgentKosticka/Jam-Patches/commit/ae0b6ca9b2e78bf65e5cc0268539dfac7fe3d480))
+
 ## [1.0.0-dev.4](https://github.com/AgentKosticka/Jam-Patches/compare/v1.0.0-dev.3...v1.0.0-dev.4) (2026-09-20)
 
 ### 🐛 Bug Fixes
