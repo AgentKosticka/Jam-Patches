@@ -1563,7 +1563,7 @@
     "patches/src/main/resources/addresources/values-zu-rZA/sponsorblock/strings.xml": "dccfa6310cba11749552e6cec309c6df0dcb9e34e2e024a784cdf51140be141b",
     "patches/src/main/resources/addresources/values-zu-rZA/youtube/strings.xml": "1c723c4d2931a7b980b9a9b070cd8f84495e4b01cd5275432a635b3333ef7bd4",
     "patches/src/main/resources/addresources/values/music/arrays.xml": "ac8f1954ef35521138f9d91f4803423c739cd5557f5a2f0efd0446e41062a911",
-    "patches/src/main/resources/addresources/values/music/strings.xml": "47e058d3b696c6906d9e2956b478fd712cfda16f4e095a6da41ce65904411862",
+    "patches/src/main/resources/addresources/values/music/strings.xml": "e627176d8222fde1587d61cfbe2f41cc07907ed86f0debb1794bd05d5aee937d",
     "patches/src/main/resources/addresources/values/reddit/strings.xml": "cc81c1ae70430cd17135da11ef23a9ceb2517b3916c134e93b2bd294c1ca348c",
     "patches/src/main/resources/addresources/values/shared-youtube/arrays.xml": "f444646ed3957a8e4a50d5de40549c20480eb6ea440919b1f31d626ef17577ae",
     "patches/src/main/resources/addresources/values/shared-youtube/strings.xml": "91cd055cbfbda8821866b38cc1c36da49a36ec5ea961c8298d4fca25cec30129",
@@ -1780,7 +1780,7 @@
     "patches/src/main/resources/voiceovertranslationbutton/drawable/morphe_yt_vot.xml": "67d6f75ac8aa848a6d7cf55d1234ea3b7ef5e3930d34897ea9f849c541278a68",
     "patches/src/main/resources/voiceovertranslationbutton/drawable/morphe_yt_vot_bold.xml": "7d925f548538427efabf48b8f213f54462d0e888786b37bf375c6c4d974e0bad",
     "patches/src/main/resources/voiceovertranslationbutton/host/layout/youtube_controls_bottom_ui_container.xml": "230faf980b1ad612e35032acb0fbaa279e0687c533258b8cb90495f94bb0228e",
-    "patches/src/test/kotlin/app/morphe/patches/music/interaction/jam/JamDeviceBuild.kt": "cb0d2280e49bad4f193473331cffcdb4811a217555b76ae95e0a7ba0cb759fd7",
+    "patches/src/test/kotlin/app/morphe/patches/music/interaction/jam/JamDeviceBuild.kt": "5fc1e4c45ae02faf40cb05a583c6e9c3dd49be2ec594ad9ddbb6c90fe48c7925",
     "patches/src/test/kotlin/app/morphe/patches/music/interaction/jam/JamPatchRegressionTest.kt": "20a73456a9dece9b47ecf28814f497c6cbbb62bee1a7f3824db7847642d9059b",
     "patches/stub/build.gradle.kts": "6a1b3bc8b7c2b9dd2da1432bd76de63c292d1b6e591c4ef849ef849069fe9a6f",
     "patches/stub/src/main/java/android/os/Build.java": "10b9827fce7cfffbe691060a7a6d5cf0385859745536124948e605bc5f1162c2"
@@ -1789,7 +1789,7 @@
     "repository": "https://github.com/AgentKosticka/morphe-patches",
     "branch": "feat/jam-queue-sharing",
     "baseCommit": "9c0074a8cc39c7194cd57325c90b012187a39910",
-    "state": "uncommitted review fixes copied from the working tree",
+    "state": "uncommitted review fixes copied from the working tree; Music strings merged with the custom-source baseline",
     "files": [
       "extensions/music/src/main/java/app/morphe/extension/music/jam/JamBar.java",
       "extensions/music/src/main/java/app/morphe/extension/music/jam/JamClock.java",
