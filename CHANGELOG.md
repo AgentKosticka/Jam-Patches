@@ -1,3 +1,9 @@
+## [1.0.0-dev.12](https://github.com/AgentKosticka/Jam-Patches/compare/v1.0.0-dev.11...v1.0.0-dev.12) (2026-09-24)
+
+### 🐛 Bug Fixes
+
+* **music:** sync reviewed Jam sources and preserve callback cancellation ([6450ae1](https://github.com/AgentKosticka/Jam-Patches/commit/6450ae1d90bfa97f6cbaff70e9806f1ca9bcc7b1))
+
 ## [1.0.0-dev.11](https://github.com/AgentKosticka/Jam-Patches/compare/v1.0.0-dev.10...v1.0.0-dev.11) (2026-09-24)
 
 ### 🐛 Bug Fixes
