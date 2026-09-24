@@ -38,6 +38,8 @@ internal data class AutoplayUiAbi(
     val refresh: MethodReference,
     val limiter: FieldReference,
     val setLimit: MethodReference,
+    val header: FieldReference,
+    val clearHeader: MethodReference,
 )
 
 internal data class ClockAbi(
@@ -435,5 +437,18 @@ private fun BytecodePatchContext.resolveAutoplayUi(queue: JamQueueAbi): Autoplay
           .map { method.getInstruction(it).getReference<FieldReference>()!! }
           .distinct()
           .singleOrNull() ?: error("Missing or ambiguous Jam autoplay display limiter")
-  return AutoplayUiAbi(method, limiter, setLimit)
+  val clear = refresh.instructionMatches[2]
+  val headerInstruction = method.getInstruction(clear.index - 1)
+  val header =
+      headerInstruction.getReference<FieldReference>() ?: error("Missing Jam autoplay header field")
+  check(headerInstruction.opcode == Opcode.IGET_OBJECT && header.definingClass == owner.type) {
+    "Unexpected Jam autoplay header access"
+  }
+  return AutoplayUiAbi(
+      method,
+      limiter,
+      setLimit,
+      header,
+      clear.instruction.getReference<MethodReference>()!!,
+  )
 }

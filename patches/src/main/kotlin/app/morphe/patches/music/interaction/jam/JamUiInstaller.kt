@@ -1,6 +1,7 @@
 package app.morphe.patches.music.interaction.jam
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
+import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.instructions
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patcher.methodCall
@@ -488,6 +489,14 @@ private fun BytecodePatchContext.installAutoplayUi(abi: AutoplayUiAbi) {
   val refresh = abi.refresh.getMutableMethod()
   val name = refresh.name
   refresh.setName("patch_jamLocalAutoplayUi")
+  refresh.findInstructionIndicesReversedOrThrow(methodCall(reference = abi.setLimit)).forEach {
+      index ->
+    val call = refresh.getInstruction<FiveRegisterInstruction>(index)
+    refresh.addInstructions(
+        index,
+        "invoke-static {v${call.registerD}}, $extension->localAutoplayLimit(I)V",
+    )
+  }
   owner.addBridge(
       name,
       emptyList(),
@@ -509,6 +518,10 @@ private fun BytecodePatchContext.installAutoplayUi(abi: AutoplayUiAbi) {
           """
         iget-object v0, p0, ${abi.limiter}
         ${invokeKind(abi.setLimit)} {v0, p1}, ${abi.setLimit}
+        if-nez p1, :done
+        iget-object v0, p0, ${abi.header}
+        ${invokeKind(abi.clearHeader)} {v0}, ${abi.clearHeader}
+        :done
         return-void
     """,
   )

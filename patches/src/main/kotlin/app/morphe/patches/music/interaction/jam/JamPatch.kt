@@ -18,6 +18,19 @@ import app.morphe.patches.shared.misc.settings.preference.SwitchPreference
 private val jamResources = resourcePatch {
   execute {
     document("AndroidManifest.xml").use { doc ->
+      val permissions = doc.getElementsByTagName("uses-permission")
+      if (
+          (0 until permissions.length).none {
+            (permissions.item(it) as org.w3c.dom.Element).getAttribute("android:name") ==
+                "android.permission.ACCESS_WIFI_STATE"
+          }
+      ) {
+        doc.documentElement.appendChild(
+            doc.createElement("uses-permission").apply {
+              setAttribute("android:name", "android.permission.ACCESS_WIFI_STATE")
+            }
+        )
+      }
       val service = doc.createElement("service")
       service.setAttribute("android:name", "app.morphe.extension.music.jam.JamBridgeService")
       service.setAttribute("android:exported", "true")

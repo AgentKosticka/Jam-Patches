@@ -76,7 +76,12 @@ public final class JamUi {
     input.setText(companionPackage(c));
     input.setSelectAllOnFocus(true);
     input.setHint(str("morphe_music_jam_package_example"));
-    input.setPadding(dp(c, 24), 0, dp(c, 24), 0);
+    input.setPadding(
+      dp(c, 24),
+      input.getPaddingTop(),
+      dp(c, 24),
+      input.getPaddingBottom()
+    );
     AlertDialog dialog = new AlertDialog.Builder(c)
       .setTitle(str("morphe_music_jam_companion_package_title"))
       .setMessage(str("morphe_music_jam_package_message"))
@@ -386,7 +391,36 @@ public final class JamUi {
     }
   }
 
+  private static boolean requireWifi(Context c) {
+    android.net.wifi.WifiManager wifi = c
+      .getApplicationContext()
+      .getSystemService(android.net.wifi.WifiManager.class);
+    if (wifi == null || wifi.isWifiEnabled()) return true;
+    AlertDialog dialog = new AlertDialog.Builder(c)
+      .setTitle(str("morphe_music_jam_wifi_title"))
+      .setMessage(str("morphe_music_jam_wifi_message"))
+      .setNegativeButton(str("morphe_music_jam_cancel"), null)
+      .setPositiveButton(str("morphe_music_jam_wifi_settings"), (d, w) -> {
+        try {
+          c.startActivity(
+            new Intent(
+              Build.VERSION.SDK_INT >= 29
+                ? android.provider.Settings.Panel.ACTION_WIFI
+                : android.provider.Settings.ACTION_WIFI_SETTINGS
+            )
+          );
+        } catch (ActivityNotFoundException error) {
+          Logger.printInfo(() -> "Could not open Wi-Fi settings", error);
+        }
+      })
+      .create();
+    dialog.show();
+    styleDialog(dialog);
+    return false;
+  }
+
   static void host(Context c) {
+    if (!requireWifi(c)) return;
     try {
       startLayer(c);
       edit(c, command("HOST"));
@@ -431,6 +465,7 @@ public final class JamUi {
   }
 
   static void join(Context c) {
+    if (!requireWifi(c)) return;
     LinearLayout content = new LinearLayout(c);
     content.setOrientation(LinearLayout.VERTICAL);
     content.setPadding(dp(c, 24), dp(c, 8), dp(c, 24), 0);
@@ -454,6 +489,7 @@ public final class JamUi {
       .setView(content)
       .setPositiveButton(str("morphe_music_jam_join"), null)
       .setNeutralButton(str("morphe_music_jam_scan_qr"), (d, w) -> {
+        if (!requireWifi(c)) return;
         try {
           Activity a = activity(c);
           if (a != null) a.startActivityForResult(
@@ -483,6 +519,7 @@ public final class JamUi {
           return;
         }
         try {
+          if (!requireWifi(c)) return;
           startLayer(c);
           call(c, command("JOIN").put("invite", value), r -> {
             if (!r.optBoolean("ok")) toast(c, r.optString("error"));

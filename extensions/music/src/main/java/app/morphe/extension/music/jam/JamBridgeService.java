@@ -87,7 +87,7 @@ public final class JamBridgeService extends Service {
     if (items.length > 500) throw new IllegalStateException(
       "Queue exceeds 500-item Jam limit"
     );
-    Object[] autoplay = a.patch_jamAutoplayItems();
+    Object[] autoplay = JamMirror.visibleAutoplay(a.patch_jamAutoplayItems());
     if (items.length + autoplay.length > 500) throw new IllegalStateException(
       "Queue exceeds 500-item Jam limit"
     );
