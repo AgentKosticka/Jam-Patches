@@ -12,9 +12,9 @@ This is a prerelease-only source. Both `main` and `dev` source metadata point to
 
 ## Source and validation
 
-The implementation is synchronized from fork commit [`1bb87b1f58ef28f3489f76e03daae3238cade8e9`](https://github.com/AgentKosticka/morphe-patches/commit/1bb87b1f58ef28f3489f76e03daae3238cade8e9). The matching Companion commit is [`e2c9e0f0299be84e4d1e95d9dbf5fc7a2a2aed1f`](https://github.com/AgentKosticka/Jam-Layer/commit/e2c9e0f0299be84e4d1e95d9dbf5fc7a2a2aed1f).
+The source baseline is fork commit [`1bb87b1f58ef28f3489f76e03daae3238cade8e9`](https://github.com/AgentKosticka/morphe-patches/commit/1bb87b1f58ef28f3489f76e03daae3238cade8e9). Jam review fixes from the `feat/jam-queue-sharing` working tree at `9c0074a8cc39c7194cd57325c90b012187a39910` are overlaid on 18 source files. The matching Companion commit is [`e2c9e0f0299be84e4d1e95d9dbf5fc7a2a2aed1f`](https://github.com/AgentKosticka/Jam-Layer/commit/e2c9e0f0299be84e4d1e95d9dbf5fc7a2a2aed1f).
 
-Reproduce the source sync with `python .github/scripts/sync_fork.py ../morphe-patches 1bb87b1f58ef28f3489f76e03daae3238cade8e9`. `source-revision.json` records the exact upstream files, hashes, dependency revisions, and build metadata overlay. Source identity and release metadata remain specific to this repository.
+The baseline can be reproduced with `python .github/scripts/sync_fork.py ../morphe-patches 1bb87b1f58ef28f3489f76e03daae3238cade8e9`; then copy the review overlay files from the fork working tree. `source-revision.json` records the review overlay file hashes and paths alongside the source baseline, dependency revisions, and build metadata overlay. Source identity and release metadata remain specific to this repository.
 
 The fork passed Jam regression tests, 9.15.51 patch/build and DEX hierarchy verification, and manual device checks including autoplay, clock updates and LAN discovery. Participant next/previous controls now forward to the host through the authenticated Jam command path and consume the local player click. The new published bundle still requires the clean Morphe Manager source and two-device manual acceptance test. Versions 9.34.52, 9.35.54 and 9.36.50 failed required semantic capability resolution and are not supported.
 
