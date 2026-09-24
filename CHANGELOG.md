@@ -1,3 +1,9 @@
+## [1.0.0-dev.10](https://github.com/AgentKosticka/Jam-Patches/compare/v1.0.0-dev.9...v1.0.0-dev.10) (2026-09-24)
+
+### 🐛 Bug Fixes
+
+* **music:** follow host autoplay and improve Jam setup ([204be6d](https://github.com/AgentKosticka/Jam-Patches/commit/204be6d71f8520fcec9913b661528e32d797a1a7))
+
 ## [1.0.0-dev.9](https://github.com/AgentKosticka/Jam-Patches/compare/v1.0.0-dev.8...v1.0.0-dev.9) (2026-09-24)
 
 ### 🐛 Bug Fixes
