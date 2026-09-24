@@ -11,20 +11,6 @@ import org.json.*;
 /** Native adapters display authoritative state plus unacknowledged local gestures. */
 public final class JamMirror {
 
-  private static volatile int localAutoplayLimit = -1;
-
-  /** Captures the native visible limit before the participant override is applied. */
-  public static void localAutoplayLimit(int count) {
-    if (mirror == null) localAutoplayLimit = Math.max(0, count);
-  }
-
-  static Object[] visibleAutoplay(Object[] items) {
-    int limit = localAutoplayLimit;
-    return limit < 0 || limit >= items.length
-      ? items
-      : Arrays.copyOf(items, limit);
-  }
-
   public interface AutoplayUi {
     void patch_jamAutoplayLimit(int count);
     void patch_jamRefreshAutoplayUi();
