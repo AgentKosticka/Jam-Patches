@@ -1,3 +1,9 @@
+## [1.0.0-dev.9](https://github.com/AgentKosticka/Jam-Patches/compare/v1.0.0-dev.8...v1.0.0-dev.9) (2026-09-24)
+
+### 🐛 Bug Fixes
+
+* **music:** restore lyrics resources in Jam source ([a1294cd](https://github.com/AgentKosticka/Jam-Patches/commit/a1294cd390b8adde2ddd9922e15d20315654b37e))
+
 ## [1.0.0-dev.8](https://github.com/AgentKosticka/Jam-Patches/compare/v1.0.0-dev.7...v1.0.0-dev.8) (2026-09-24)
 
 ### 🐛 Bug Fixes
