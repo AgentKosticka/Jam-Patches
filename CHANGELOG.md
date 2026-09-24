@@ -1,3 +1,9 @@
+## [1.0.0-dev.8](https://github.com/AgentKosticka/Jam-Patches/compare/v1.0.0-dev.7...v1.0.0-dev.8) (2026-09-24)
+
+### 🐛 Bug Fixes
+
+* **music:** sync Jam review fixes ([271befc](https://github.com/AgentKosticka/Jam-Patches/commit/271befcead27f9a9286f521e888d63d4ec7d28b6))
+
 ## [1.0.0-dev.7](https://github.com/AgentKosticka/Jam-Patches/compare/v1.0.0-dev.6...v1.0.0-dev.7) (2026-09-21)
 
 ### 🐛 Bug Fixes
