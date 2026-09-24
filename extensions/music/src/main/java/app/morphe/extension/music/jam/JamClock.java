@@ -1,17 +1,36 @@
+/*
+ * Copyright 2026 Morphe.
+ * https://github.com/MorpheApp/morphe-patches/pull/3014
+ *
+ * See the included NOTICE file for GPLv3 Section 7 terms that apply to this code.
+ */
+
 package app.morphe.extension.music.jam;
 
 import static app.morphe.extension.shared.StringRef.str;
 
-import android.app.*;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.media.MediaMetadata;
-import android.media.session.*;
+import android.media.session.MediaController;
+import android.media.session.MediaSession;
+import android.media.session.PlaybackState;
 import android.os.SystemClock;
 import android.view.View;
 import app.morphe.extension.music.shared.VideoInformation;
 import app.morphe.extension.shared.Logger;
-import java.util.*;
-import java.util.concurrent.*;
-import org.json.*;
+import app.morphe.extension.shared.Utils;
+import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
+import java.util.WeakHashMap;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /** Host clock samples are separate from queue revisions and use local monotonic time. */
 public final class JamClock {
@@ -99,6 +118,7 @@ public final class JamClock {
     if (state.getActiveQueueItemId() != itemId) controls.skipToQueueItem(
       itemId
     );
+    // Keep the callback on the handler used to cancel it in the finally block.
     JamUi.main.post(confirm);
     try {
       playing.get(8, TimeUnit.SECONDS);
@@ -132,7 +152,7 @@ public final class JamClock {
       else current.getTransportControls().skipToPrevious();
       return null;
     });
-    JamUi.main.post(task);
+    Utils.runOnMainThread(task);
     try {
       task.get(5, TimeUnit.SECONDS);
     } finally {
@@ -201,7 +221,7 @@ public final class JamClock {
       Math.min(4000, Math.max(0, next.optLong("age")));
     if (!ticking) {
       ticking = true;
-      JamUi.main.post(tick);
+      Utils.runOnMainThread(tick);
     }
   }
 
@@ -238,7 +258,7 @@ public final class JamClock {
         } catch (Exception error) {
           Logger.printDebug(() -> "Could not update Jam time bar", error);
         }
-      JamUi.main.postDelayed(this, 200);
+      Utils.runOnMainThreadDelayed(this, 200);
     }
   };
 
@@ -267,7 +287,7 @@ public final class JamClock {
     if (duration <= 0) return true;
     long at = Math.max(0, Math.min(duration - 1, target));
     String video = sample.optString("videoId");
-    JamUi.main.post(() -> {
+    Utils.runOnMainThread(() -> {
       Activity a = JamUi.activity(null);
       if (a == null || a.isFinishing() || !JamPlayback.claimDialog()) return;
       String time = String.format(
@@ -322,7 +342,7 @@ public final class JamClock {
       c.getTransportControls().seekTo(position);
       return null;
     });
-    JamUi.main.post(task);
+    Utils.runOnMainThread(task);
     task.get(5, TimeUnit.SECONDS);
   }
 
@@ -336,13 +356,15 @@ public final class JamClock {
       controller.getTransportControls().seekTo(position);
       return;
     }
-    if (attempts > 0) JamUi.main.postDelayed(
+    if (attempts > 0) Utils.runOnMainThreadDelayed(
       () -> seekLocalWhenReady(video, position, attempts - 1),
       200
     );
     else {
       Activity a = JamUi.activity(null);
-      if (a != null) JamUi.toast(a, str("morphe_music_jam_seek_not_ready"));
+      if (a != null) Utils.showToastLong(
+        str("morphe_music_jam_seek_not_ready")
+      );
     }
   }
 }

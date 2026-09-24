@@ -1,21 +1,51 @@
+/*
+ * Copyright 2026 Morphe.
+ * https://github.com/MorpheApp/morphe-patches/pull/3014
+ *
+ * See the included NOTICE file for GPLv3 Section 7 terms that apply to this code.
+ */
+
 package app.morphe.extension.music.jam;
 
 import static app.morphe.extension.shared.StringRef.str;
 
-import android.app.*;
-import android.content.*;
-import android.graphics.*;
-import android.os.*;
-import android.widget.*;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.ContextWrapper;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
+import android.os.Build;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Looper;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import app.morphe.extension.music.settings.Settings;
 import app.morphe.extension.shared.Logger;
-import app.morphe.jam.ipc.*;
+import app.morphe.extension.shared.Utils;
+import app.morphe.jam.ipc.BridgeProtocol;
+import app.morphe.jam.ipc.IJamCompanion;
+import app.morphe.jam.ipc.Trust;
 import java.lang.ref.WeakReference;
 import java.security.SecureRandom;
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
-import org.json.*;
+import org.json.JSONObject;
 
 /** Player-integrated UI, with one live shared-state feed per YTM process. */
 public final class JamUi {
@@ -104,7 +134,7 @@ public final class JamUi {
           .apply();
         latest = new JSONObject();
         dialog.dismiss();
-        toast(c, str("morphe_music_jam_package_saved"));
+        Utils.showToastLong(str("morphe_music_jam_package_saved"));
       })
     );
     dialog.show();
@@ -138,7 +168,7 @@ public final class JamUi {
 
   public static void install(Activity a) {
     if (!ENABLED) return;
-    main.post(() -> {
+    Utils.runOnMainThread(() -> {
       try {
         current = new WeakReference<>(a);
         application = a.getApplicationContext();
@@ -188,43 +218,49 @@ public final class JamUi {
     main.post(poll);
   }
 
+  // The utility wraps callbacks on another handler, preventing pollNow() from canceling them.
   private static final Runnable poll = new Runnable() {
     public void run() {
-      if (
-        (!observers.isEmpty() || feedEnabled()) &&
-        !inFlight &&
-        companion != null
-      ) {
-        inFlight = true;
-        updates.execute(() -> {
-          JSONObject value;
-          try {
-            value = companionCall(
-              application,
-              companion,
-              new JSONObject().put("op", "VIEW")
-            );
-          } catch (Exception e) {
-            value = JamBridgeService.error(
-              str("morphe_music_jam_disconnected")
-            );
-          }
-          JSONObject received = value;
-          main.post(() -> {
-            inFlight = false;
-            latest = received;
-            JamMirror.accept(application, received);
-            JamClock.accept(received);
-            for (Consumer<JSONObject> listener : new ArrayList<>(observers))
-              listener.accept(received);
+      try {
+        if (
+          (!observers.isEmpty() || feedEnabled()) &&
+          !inFlight &&
+          companion != null
+        ) {
+          inFlight = true;
+          updates.execute(() -> {
+            JSONObject value;
+            try {
+              value = companionCall(
+                application,
+                companion,
+                new JSONObject().put("op", "VIEW")
+              );
+            } catch (Exception e) {
+              value = JamBridgeService.error(
+                str("morphe_music_jam_disconnected")
+              );
+            }
+            JSONObject received = value;
+            Utils.runOnMainThread(() -> {
+              inFlight = false;
+              latest = received;
+              JamMirror.accept(application, received);
+              JamClock.accept(received);
+              for (Consumer<JSONObject> listener : new ArrayList<>(observers))
+                listener.accept(received);
+            });
           });
-        });
-      }
-      if (observers.isEmpty() && !feedEnabled()) {
+        }
+        if (observers.isEmpty() && !feedEnabled()) {
+          polling = false;
+          return;
+        }
+        main.postDelayed(this, sessionActive() ? 600 : 3000);
+      } catch (Exception error) {
         polling = false;
-        return;
+        Logger.printInfo(() -> "Could not poll Jam state", error);
       }
-      main.postDelayed(this, sessionActive() ? 600 : 3000);
     }
   };
 
@@ -256,7 +292,7 @@ public final class JamUi {
               error
             );
           }
-          main.postDelayed(() -> bind(app), 1500);
+          Utils.runOnMainThreadDelayed(() -> bind(app), 1500);
         }
       };
       binding = app.bindService(
@@ -298,7 +334,7 @@ public final class JamUi {
 
   static void call(Context c, JSONObject request, Consumer<JSONObject> done) {
     if (Looper.myLooper() != Looper.getMainLooper()) {
-      main.post(() -> call(c, request, done));
+      Utils.runOnMainThread(() -> call(c, request, done));
       return;
     }
     bind(c);
@@ -316,7 +352,7 @@ public final class JamUi {
         value = JamBridgeService.error(e.getMessage());
       }
       JSONObject response = value;
-      main.post(() -> {
+      Utils.runOnMainThread(() -> {
         pending = Math.max(0, pending - 1);
         if (
           response.optBoolean("ok") &&
@@ -344,7 +380,7 @@ public final class JamUi {
 
   static void edit(Context c, JSONObject request) {
     call(c, request, r -> {
-      if (!r.optBoolean("ok")) toast(c, r.optString("error"));
+      if (!r.optBoolean("ok")) Utils.showToastLong(r.optString("error"));
     });
   }
 
@@ -367,10 +403,6 @@ public final class JamUi {
     );
   }
 
-  static void toast(Context c, String message) {
-    Toast.makeText(c, message, Toast.LENGTH_LONG).show();
-  }
-
   private static void startLayer(Context c) {
     c.startForegroundService(
       new Intent()
@@ -381,7 +413,7 @@ public final class JamUi {
 
   public static void open(Context context) {
     if (!ENABLED) {
-      toast(context, str("morphe_music_jam_enable_patch_first"));
+      Utils.showToastLong(str("morphe_music_jam_enable_patch_first"));
       return;
     }
     try {
@@ -441,16 +473,16 @@ public final class JamUi {
       c.getSharedPreferences("jam", 0)
         .edit()
         .putString("cap", token.toString())
-        .commit();
+        .apply();
       a.startActivityForResult(
         new Intent("app.morphe.jam.PAIR")
           .setComponent(companionComponent(c, COMPANION_ACTIVITY))
           .putExtra("cap", token.toString()),
         18431
       );
-      main.postDelayed(() -> bind(c), 1500);
+      Utils.runOnMainThreadDelayed(() -> bind(c), 1500);
     } catch (Exception e) {
-      toast(c, str("morphe_music_jam_install_layer_first"));
+      Utils.showToastLong(str("morphe_music_jam_install_layer_first"));
     }
   }
 
@@ -460,7 +492,7 @@ public final class JamUi {
         new Intent().setComponent(companionComponent(c, COMPANION_ACTIVITY))
       );
     } catch (Exception e) {
-      toast(c, str("morphe_music_jam_install_layer_first"));
+      Utils.showToastLong(str("morphe_music_jam_install_layer_first"));
     }
   }
 
@@ -522,7 +554,7 @@ public final class JamUi {
           if (!requireWifi(c)) return;
           startLayer(c);
           call(c, command("JOIN").put("invite", value), r -> {
-            if (!r.optBoolean("ok")) toast(c, r.optString("error"));
+            if (!r.optBoolean("ok")) Utils.showToastLong(r.optString("error"));
           });
           dialog.dismiss();
           open(c);
@@ -538,7 +570,7 @@ public final class JamUi {
   static void invite(Context c) {
     call(c, command("INVITE"), r -> {
       if (!r.optBoolean("ok")) {
-        toast(c, r.optString("error"));
+        Utils.showToastLong(r.optString("error"));
         return;
       }
       String code = r.optString("code");
@@ -627,7 +659,9 @@ public final class JamUi {
     if (decoded == null || a == null || a.isFinishing()) return false;
     if (companion == null) {
       if (JamMirror.active()) {
-        main.post(() -> toast(a, str("morphe_music_jam_reconnecting_toast")));
+        Utils.runOnMainThread(() ->
+          Utils.showToastLong(str("morphe_music_jam_reconnecting_toast"))
+        );
         return true;
       }
       return false;
@@ -646,15 +680,16 @@ public final class JamUi {
           return;
         }
         call(a, command(decoded[1]).put("videoId", decoded[0]), response ->
-          toast(
-            a,
+          Utils.showToastLong(
             response.optBoolean("ok")
               ? str("morphe_music_jam_added_to_jam")
               : response.optString("error")
           )
         );
       } catch (Exception e) {
-        main.post(() -> toast(a, str("morphe_music_jam_unavailable_toast")));
+        Utils.runOnMainThread(() ->
+          Utils.showToastLong(str("morphe_music_jam_unavailable_toast"))
+        );
       }
     });
     return true;
