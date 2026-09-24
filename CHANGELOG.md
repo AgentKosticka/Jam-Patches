@@ -1,3 +1,9 @@
+## [1.0.0-dev.11](https://github.com/AgentKosticka/Jam-Patches/compare/v1.0.0-dev.10...v1.0.0-dev.11) (2026-09-24)
+
+### 🐛 Bug Fixes
+
+* **music:** preserve autoplay suggestions and queue boundary ([3ab5959](https://github.com/AgentKosticka/Jam-Patches/commit/3ab5959fc9be084deb684b3364f1725d3bb730ee))
+
 ## [1.0.0-dev.10](https://github.com/AgentKosticka/Jam-Patches/compare/v1.0.0-dev.9...v1.0.0-dev.10) (2026-09-24)
 
 ### 🐛 Bug Fixes
