@@ -27,7 +27,7 @@ Jam depends on `versionCheckPatch` and checks the exact supported-version allowl
 ## Patch catalog
 
 <!-- PATCHES_START -->
-> **[v1.0.0-dev.13](https://github.com/AgentKosticka/Jam-Patches/releases/tag/v1.0.0-dev.13)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;151 patches total
+> **[v1.0.0-dev.14](https://github.com/AgentKosticka/Jam-Patches/releases/tag/v1.0.0-dev.14)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;151 patches total
 <details>
 <summary>📦 YouTube&nbsp;&nbsp;•&nbsp;&nbsp;84 patches</summary>
 <br>

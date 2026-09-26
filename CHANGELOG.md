@@ -1,3 +1,9 @@
+## [1.0.0-dev.14](https://github.com/AgentKosticka/Jam-Patches/compare/v1.0.0-dev.13...v1.0.0-dev.14) (2026-09-26)
+
+### 🐛 Bug Fixes
+
+* **Jam:** route player controls to host and guard supported versions ([d75c61a](https://github.com/AgentKosticka/Jam-Patches/commit/d75c61aaee5d39985423b78a1e3d9c4e9697696f))
+
 ## [1.0.0-dev.13](https://github.com/AgentKosticka/Jam-Patches/compare/v1.0.0-dev.12...v1.0.0-dev.13) (2026-09-25)
 
 ### ✨ New Features
