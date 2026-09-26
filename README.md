@@ -24,6 +24,15 @@ Compact-player previous/next and both play/pause buttons now route participant a
 
 Jam depends on `versionCheckPatch` and checks the exact supported-version allowlist before its bytecode and resource edits. Unsupported versions are skipped with a warning.
 
+### Session behavior update
+
+Joining pauses participant audio; leaving restores local controls and keeps audio
+paused until explicitly played. Host/join entry allows Wi-Fi-off BLE sessions,
+the player shows BLE connection status, and unsupported playlist/downloaded queue
+actions display the translatable **Unsupported during Jam** message. Setup and
+session replies update the UI promptly. Use the matching Jam Layer lifecycle build
+for cancellation and foreground cleanup. See the [exact two-device test steps](docs/session-lifecycle-testing.md).
+
 ## Patch catalog
 
 <!-- PATCHES_START -->
