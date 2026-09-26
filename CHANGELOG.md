@@ -1,3 +1,9 @@
+## [1.0.0-dev.15](https://github.com/AgentKosticka/Jam-Patches/compare/v1.0.0-dev.14...v1.0.0-dev.15) (2026-09-26)
+
+### 🐛 Bug Fixes
+
+* **music:** make Jam sessions responsive and isolate guest playback ([d79890b](https://github.com/AgentKosticka/Jam-Patches/commit/d79890bfd188106dfcfcc05ff40b31cff28c319a))
+
 ## [1.0.0-dev.14](https://github.com/AgentKosticka/Jam-Patches/compare/v1.0.0-dev.13...v1.0.0-dev.14) (2026-09-26)
 
 ### 🐛 Bug Fixes
