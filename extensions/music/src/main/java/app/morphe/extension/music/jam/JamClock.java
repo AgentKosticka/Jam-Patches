@@ -10,7 +10,7 @@ package app.morphe.extension.music.jam;
 import static app.morphe.extension.shared.StringRef.str;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+import android.app.Dialog;
 import android.media.MediaMetadata;
 import android.media.session.MediaController;
 import android.media.session.MediaSession;
@@ -385,33 +385,28 @@ public final class JamClock {
         at / 60000,
         (at / 1000) % 60
       );
-      AlertDialog d = new AlertDialog.Builder(a)
-        .setTitle(String.format(str("morphe_music_jam_seek_to"), time))
-        .setItems(
-          new String[] {
-            str("morphe_music_jam_move_host_here"),
-            str("morphe_music_jam_quit_and_play"),
-          },
-          (w, index) -> {
-            if (index == 0) {
-              try {
-                JamUi.edit(
-                  a,
-                  JamUi.command("SEEK")
-                    .put("videoId", video)
-                    .put("position", at)
-                );
-              } catch (Exception error) {
-                Logger.printInfo(() -> "Could not send Jam seek", error);
-              }
-            } else JamPlayback.leaveAndPlay(a, video, at);
-          }
-        )
-        .setNegativeButton(str("morphe_music_jam_cancel"), null)
-        .setOnDismissListener(w -> JamPlayback.releaseDialog())
-        .create();
+      Dialog d = JamUi.choiceDialog(
+        a,
+        String.format(str("morphe_music_jam_seek_to"), time),
+        new String[] {
+          str("morphe_music_jam_move_host_here"),
+          str("morphe_music_jam_quit_and_play"),
+        },
+        index -> {
+          if (index == 0) {
+            try {
+              JamUi.edit(
+                a,
+                JamUi.command("SEEK").put("videoId", video).put("position", at)
+              );
+            } catch (Exception error) {
+              Logger.printInfo(() -> "Could not send Jam seek", error);
+            }
+          } else JamPlayback.leaveAndPlay(a, video, at);
+        }
+      );
+      d.setOnDismissListener(w -> JamPlayback.releaseDialog());
       d.show();
-      JamUi.styleDialog(d);
     });
     return true;
   }
@@ -432,7 +427,11 @@ public final class JamClock {
       return null;
     });
     Utils.runOnMainThread(task);
-    task.get(5, TimeUnit.SECONDS);
+    try {
+      task.get(5, TimeUnit.SECONDS);
+    } finally {
+      task.cancel(false);
+    }
   }
 
   static void seekLocalWhenReady(String video, long position, int attempts) {

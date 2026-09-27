@@ -12,12 +12,13 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 import androidx.annotation.Nullable;
+import app.morphe.extension.shared.Logger;
 import app.morphe.extension.shared.Utils;
+import app.morphe.extension.shared.requests.Requester;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
@@ -76,9 +77,7 @@ public final class JamArtwork {
     picture = null;
     loader.execute(() -> {
       try {
-        HttpURLConnection connection = (HttpURLConnection) new URL(
-          value
-        ).openConnection();
+        HttpURLConnection connection = Requester.openConnection(value);
         connection.setConnectTimeout(5000);
         connection.setReadTimeout(5000);
         connection.setInstanceFollowRedirects(false);
@@ -133,7 +132,7 @@ public final class JamArtwork {
           }
         });
       } catch (Exception e) {
-        android.util.Log.i("MorpheJam", "Host artwork unavailable");
+        Logger.printInfo(() -> "Host artwork unavailable", e);
       }
     });
   }
