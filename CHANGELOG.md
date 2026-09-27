@@ -1,3 +1,9 @@
+## [1.0.0-dev.17](https://github.com/AgentKosticka/Jam-Patches/compare/v1.0.0-dev.16...v1.0.0-dev.17) (2026-09-27)
+
+### 🐛 Bug Fixes
+
+* **music:** handle contextual song links and restore Jam artwork ([8b2befa](https://github.com/AgentKosticka/Jam-Patches/commit/8b2befacafe83431717df41fd5f0df151150a86b))
+
 ## [1.0.0-dev.16](https://github.com/AgentKosticka/Jam-Patches/compare/v1.0.0-dev.15...v1.0.0-dev.16) (2026-09-27)
 
 ### 🐛 Bug Fixes
