@@ -191,6 +191,73 @@ public final class JamClock {
     }
   }
 
+  private static android.graphics.Bitmap exportedArtwork;
+  private static String exportedArtworkData = "";
+  private static String exportedArtworkVideo = "";
+
+  /** Use the host's actual player cover, not a padded video-thumbnail fallback. */
+  static String artwork(String video) {
+    MediaController current = controller;
+    if (
+      current == null || !video.equals(VideoInformation.getVideoId())
+    ) return "";
+    MediaMetadata metadata = current.getMetadata();
+    if (metadata == null) return "";
+    android.graphics.Bitmap bitmap = metadata.getBitmap(
+      MediaMetadata.METADATA_KEY_ALBUM_ART
+    );
+    if (bitmap == null) bitmap = metadata.getBitmap(
+      MediaMetadata.METADATA_KEY_ART
+    );
+    if (bitmap == null) bitmap = metadata.getBitmap(
+      MediaMetadata.METADATA_KEY_DISPLAY_ICON
+    );
+    if (bitmap == null || bitmap.isRecycled()) return "";
+    if (
+      bitmap == exportedArtwork && video.equals(exportedArtworkVideo)
+    ) return exportedArtworkData;
+    try {
+      int width = bitmap.getWidth(),
+        height = bitmap.getHeight();
+      float scale = Math.min(1f, 512f / Math.max(width, height));
+      android.graphics.Bitmap sized =
+        android.graphics.Bitmap.createScaledBitmap(
+          bitmap,
+          Math.max(1, Math.round(width * scale)),
+          Math.max(1, Math.round(height * scale)),
+          true
+        );
+      java.io.ByteArrayOutputStream output =
+        new java.io.ByteArrayOutputStream();
+      try {
+        for (int quality = 85; quality >= 25; quality -= 20) {
+          output.reset();
+          if (
+            !sized.compress(
+              android.graphics.Bitmap.CompressFormat.JPEG,
+              quality,
+              output
+            )
+          ) return "";
+          if (output.size() <= 128000) break;
+        }
+        if (output.size() > 128000) return "";
+        exportedArtworkData = android.util.Base64.encodeToString(
+          output.toByteArray(),
+          android.util.Base64.NO_WRAP
+        );
+        exportedArtwork = bitmap;
+        exportedArtworkVideo = video;
+        return exportedArtworkData;
+      } finally {
+        if (sized != bitmap) sized.recycle();
+      }
+    } catch (Exception error) {
+      Logger.printInfo(() -> "Could not export host player artwork", error);
+      return "";
+    }
+  }
+
   static JSONObject snapshot() throws Exception {
     MediaController c = controller;
     JSONObject out = new JSONObject()

@@ -89,6 +89,11 @@ public final class JamUi {
 
   private static void publish(JSONObject value) {
     latest = value;
+    JSONObject session = value.optJSONObject("session");
+    if (session != null && !"Participant".equals(session.optString("role"))) {
+      // Restore immediately even if the native queue bridge was recreated or is unavailable.
+      JamArtwork.clear();
+    }
     JamClock.accept(value);
     JamMirror.accept(application, value);
     notifyState();
