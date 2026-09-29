@@ -39,7 +39,7 @@ For local APK validation commands and prerequisites, see the file header of
 ## Patch catalog
 
 <!-- PATCHES_START -->
-> **[v1.0.0-dev.17](https://github.com/AgentKosticka/Jam-Patches/releases/tag/v1.0.0-dev.17)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;151 patches total
+> **[v1.0.0-dev.18](https://github.com/JamQueueSharing/Jam-Patches/releases/tag/v1.0.0-dev.18)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;151 patches total
 <details>
 <summary>📦 YouTube&nbsp;&nbsp;•&nbsp;&nbsp;84 patches</summary>
 <br>
@@ -207,7 +207,7 @@ For local APK validation commands and prerequisites, see the file header of
 | [Hide flyout menu components](#hide-flyout-menu-components) | Adds options to hide individual items from the player and queue flyout menus. |  |
 | [Hide layout components](#hide-layout-components) | Adds options to hide general layout components. |  |
 | [Hide music action buttons](#hide-music-action-buttons) | Adds options to hide action buttons under the player. |  |
-| [Jam queue sharing](#jam-queue-sharing) | Shares the host queue and playback controls through an authenticated Jam bridge. Supports YouTube Music 9.15.51; 9.35.54, 9.36.50 and 9.37.54 are experimental and require device testing. Other versions are skipped with a warning. Root installation is not supported. |  |
+| [Jam queue sharing](#jam-queue-sharing) | Shares the host queue and playback controls through an authenticated Jam bridge. Root installation is not supported. |  |
 | [Miniplayer previous and next buttons](#miniplayer-previous-and-next-buttons) | Adds options to show previous and next track buttons in the miniplayer. |  |
 | [Navigation bar](#navigation-bar) | Adds options to hide navigation bar, labels and buttons. |  |
 | [Network proxy](#network-proxy) | Adds settings to route supported network requests through an HTTP or HTTPS proxy. Including this patch may cause connectivity problems on certain devices |  |
