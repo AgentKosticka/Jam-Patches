@@ -16,7 +16,7 @@ The source baseline is fork commit [`1bb87b1f58ef28f3489f76e03daae3238cade8e9`](
 
 The baseline can be reproduced with `python .github/scripts/sync_fork.py ../morphe-patches 1bb87b1f58ef28f3489f76e03daae3238cade8e9`; then apply the committed Jam overlay and removals recorded in `reviewOverlay`, merging only Jam strings into the Music resources. `source-revision.json` records the review overlay file hashes and paths alongside the source baseline, dependency revisions, and build metadata overlay. Source identity and release metadata remain specific to this repository.
 
-The fork passed Jam regression tests, 9.15.51 patch/build and DEX hierarchy verification, and manual device checks including autoplay, clock updates and LAN discovery. Participant next/previous controls now forward to the host through the authenticated Jam command path and consume the local player click. The new published bundle still requires the clean Morphe Manager source and two-device manual acceptance test. Versions 9.35.54, 9.36.50 and 9.37.54 now pass local patch application, SDK DEX verification and APK construction. They remain experimental: device behavior and the published Manager flow still need user testing. Version 9.34.52 remains excluded. See [experimental compatibility and testing](docs/experimental-versions.md) for the changes, validation traces and handoff checklist.
+The fork passed Jam regression tests, 9.15.51 patch/build and DEX hierarchy verification, and manual device checks including autoplay, clock updates and LAN discovery. Participant next/previous controls now forward to the host through the authenticated Jam command path and consume the local player click. The new published bundle still requires the clean Morphe Manager source and two-device manual acceptance test. Versions 9.35.54, 9.36.50 and 9.37.54 now pass local patch application, SDK DEX verification and APK construction. They remain experimental: device behavior and the published Manager flow still need user testing. Version 9.34.52 remains excluded.
 
 ### Player controls update
 
@@ -31,7 +31,10 @@ paused until explicitly played. Host/join entry allows Wi-Fi-off BLE sessions,
 the player shows BLE connection status, and unsupported playlist/downloaded queue
 actions display the translatable **Unsupported during Jam** message. Setup and
 session replies update the UI promptly. Use the matching Jam Layer lifecycle build
-for cancellation and foreground cleanup. See the [exact two-device test steps](docs/session-lifecycle-testing.md).
+for cancellation and foreground cleanup.
+
+For local APK validation commands and prerequisites, see the file header of
+`patches/src/test/kotlin/app/morphe/patches/music/interaction/jam/JamDeviceBuild.kt`.
 
 ## Patch catalog
 
